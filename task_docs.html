@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoboTask Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .robot-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #00d4ff, #0096ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8)); }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 1rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #00d4ff, #0096ff);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: block;
+        }
+
+        .task-content {
+            display: none;
+        }
+
+        /* About Section */
+        .about-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .about-section h2 {
+            color: #00d4ff;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .profile-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(255, 107, 107, 0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Task Grid */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .task-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+            border-color: #00d4ff;
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00d4ff, #ff6b6b);
+        }
+
+        .task-number {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00d4ff, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .task-title {
+            font-size: 1.5rem;
+            color: #00d4ff;
+            margin-bottom: 1rem;
+        }
+
+        .task-description {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .task-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            color: white;
+        }
+
+        .status-in-progress {
+            background: linear-gradient(45deg, #ffaa00, #ff8800);
+            color: white;
+        }
+
+        .status-pending {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+
+        /* Task Detail Content */
+        .task-detail {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .task-detail h2 {
+            color: #00d4ff;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .task-detail h3 {
+            color: #ff6b6b;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        .task-detail ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .task-detail li {
+            margin-bottom: 0.5rem;
+            color: #b0b0b0;
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff5252);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .task-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animated Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .bg-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float-bg 20s ease-in-out infinite;
+        }
+
+        @keyframes float-bg {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-50px) rotate(180deg); }
+        }
+
+        .bg-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            font-size: 2rem;
+            animation-delay: 0s;
+        }
+
+        .bg-element:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            font-size: 1.5rem;
+            animation-delay: 5s;
+        }
+
+        .bg-element:nth-child(3) {
+            top: 40%;
+            left: 80%;
+            font-size: 1.8rem;
+            animation-delay: 10s;
+        }
+        .skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.skill-item {
+  background-color: #000000;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.skill-item:hover {
+  transform: scale(1.02);
+  background-color: #e6f0fa;
+}
+.code-block {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'Courier New', Courier, monospace;
+  margin-top: 10px;
+}
+.code-toggle {
+  background-color: #2d6cdf;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="bg-elements">
+        <div class="bg-element">🤖</div>
+        <div class="bg-element">⚙️</div>
+        <div class="bg-element">🔧</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="robot-icon">🤖</div>
+            <h1>Task Documentation</h1>
+            <p class="subtitle">Cloud Automation in Action
+</p>
+        </header>
+
+        <nav>
+            <button class="nav-btn" onclick="showSection('home')">Home</button>
+            <button class="nav-btn" onclick="showSection('about')">About</button>
+            <button class="nav-btn" onclick="showSection('tasks')">All Tasks</button>
+        </nav>
+
+        <main>
+            <!-- Home Section -->
+            <div id="home" class="main-content">
+                <div class="about-section">
+                    <h2>Welcome </h2>
+                    <div class="about-content">
+                        <div class="profile-card">
+                            <div class="profile-avatar">👨‍💻</div>
+                            <h3>Yaswanth Kumar Reddy<h3>
+                            <p>Section - 007</p>
+                            <p></p>
+                        </div>
+                        <div>
+<p>Welcome to my AWS infrastructure automation showcase! This platform documents my hands-on work with Terraform to provision and manage multiple AWS services, including EC2, Lambda, S3, RDS, Athena, CloudTrail, and more — all within a unified, codified infrastructure-as-code workflow.</p>
+                            <br>
+<p>Explore the various AWS infrastructure tasks I've completed, each with detailed Terraform implementation notes and results. This system is designed to provide clear insights into infrastructure automation, service orchestration, and real-world cloud provisioning practices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="task-grid">
+                    <div class="task-card" onclick="showTask(1)">
+    <div class="task-number">01</div>
+    <h3 class="task-title">Basic EC2 Deployment</h3>
+    <p class="task-description">Installed Terraform and launched a t2.micro EC2 instance using Amazon Linux 2 via Terraform.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(2)">
+    <div class="task-number">02</div>
+    <h3 class="task-title">Secure Ubuntu EC2 with SSH/HTTPS</h3>
+    <p class="task-description">Provisioned an Ubuntu EC2 instance with SSH & HTTPS access using default VPC and custom security groups.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(3)">
+    <div class="task-number">03</div>
+    <h3 class="task-title">Multi-Service AWS Infrastructure</h3>
+    <p class="task-description">Automated deployment of EC2, VPC, Lambda, S3, RDS, CloudWatch, Athena, and more using Terraform.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(4)">
+    <div class="task-number">04</div>
+    <h3 class="task-title">Static S3 Website & EC2 Dev Server</h3>
+    <p class="task-description">Hosted a static site on S3 and launched a Python-ready EC2 dev server using user data scripts.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div id="about" class="main-content" style="display: none;">
+                <div class="about-section">
+                    <h2>About Me</h2>
+                    <div class="about-content">
+                        <div class="profile-card">
+    <div class="profile-avatar">🧑‍💻</div>
+    <h3>Undela Yaswanth Kumar Reddy</h3>
+    <p><strong>Cloud & DevOps Enthusiast</strong></p>
+    <p><strong>Infrastructure as Code Practitioner</strong></p>
+    <p><strong>AWS Automation Specialist</strong></p>
+</div>
+<div>
+    <h3>Professional Background</h3>
+    <p>I'm passionate about cloud infrastructure and automation, with hands-on experience deploying and managing AWS services using Terraform. My recent work includes automating the provisioning of EC2, Lambda, S3, RDS, Athena, CloudTrail, and more in a unified IaC workflow.</p>
+    
+    <br>
+
+    <h3>Technical Skills</h3>
+<div class="skills-grid">
+  <div class="skill-item">AWS (EC2, Lambda, S3, RDS, etc.)</div>
+  <div class="skill-item">Terraform (IaC)</div>
+  <div class="skill-item">CI/CD (Jenkins, GitHub Actions)</div>
+  <div class="skill-item">Linux System Administration</div>
+  <div class="skill-item">Python & Shell Scripting</div>
+  <div class="skill-item">Networking & Cloud Security</div>
+</div>
+
+    
+    <br>
+    <h3>Mission</h3>
+    <p>To simplify and accelerate cloud infrastructure deployment using automation tools, enabling scalable and reliable DevOps workflows in real-world environments.</p>
+</div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks Overview -->
+            <div id="tasks" class="main-content" style="display: none;">
+                <div class="about-section">
+                    <h2>All Tasks Overview</h2>
+                    <p>Here's a comprehensive overview of all robotic tasks in my documentation system. Each task represents a different aspect of robotic automation and intelligence.</p>
+                </div>
+
+                <div class="task-grid">
+                    <div class="task-card" onclick="showTask(1)">
+    <div class="task-number">01</div>
+    <h3 class="task-title">Basic EC2 Deployment</h3>
+    <p class="task-description">Installed Terraform and launched a t2.micro EC2 instance using Amazon Linux 2 via Terraform.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(2)">
+    <div class="task-number">02</div>
+    <h3 class="task-title">Secure Ubuntu EC2 with SSH/HTTPS</h3>
+    <p class="task-description">Provisioned an Ubuntu EC2 instance with SSH & HTTPS access using default VPC and custom security groups.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(3)">
+    <div class="task-number">03</div>
+    <h3 class="task-title">Multi-Service AWS Infrastructure</h3>
+    <p class="task-description">Automated deployment of EC2, VPC, Lambda, S3, RDS, CloudWatch, Athena, and more using Terraform.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+<div class="task-card" onclick="showTask(4)">
+    <div class="task-number">04</div>
+    <h3 class="task-title">Static S3 Website & EC2 Dev Server</h3>
+    <p class="task-description">Hosted a static site on S3 and launched a Python-ready EC2 dev server using user data scripts.</p>
+    <span class="task-status status-completed">Completed</span>
+</div>
+
+                </div>
+            </div>
+
+            <!-- Task Detail Pages -->
+            <div id="task-1" class="task-content">
+    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+    <div class="task-detail">
+        <h2>Task 01: Launch EC2 Instance with Terraform</h2>
+
+        <h3>Overview</h3>
+        <p>This task involved setting up Terraform on a Windows system and using it to automate the launch of a basic EC2 instance in AWS. It served as the foundational step in understanding Infrastructure as Code (IaC) practices using Terraform.</p>
+
+        <h3>Key Steps</h3>
+        <ul>
+            <li>Downloaded and installed Terraform</li>
+            <li>Configured AWS provider with access credentials</li>
+            <li>Created Terraform configuration to launch a t2.micro EC2 instance</li>
+            <li>Used Amazon Linux 2 AMI for the instance</li>
+            <li>Tagged the instance as "amazon_linux"</li>
+        </ul>
+
+        <h3>Technical Implementation</h3>
+        <p>
+            The Terraform script included provider configuration and a resource block for launching an EC2 instance. After writing the configuration, commands such as <code>terraform init</code>, <code>validate</code>, <code>plan</code>, and <code>apply</code> were executed to provision the instance.
+        </p>
+
+        <h3>Commands Used</h3>
+        <ul>
+            <li><code>terraform init</code></li>
+            <li><code>terraform validate</code></li>
+            <li><code>terraform plan</code></li>
+            <li><code>terraform apply</code></li>
+            <li><code>terraform destroy</code></li>
+        </ul>
+        <h3>Terraform Code</h3>
+<button class="code-toggle" onclick="toggleCode()">Show Code</button>
+<pre id="terraform-code" class="code-block" style="display: none;">
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "YOUR_ACCESS_KEY"
+  secret_key = "YOUR_SECRET_KEY"
+}
+
+resource "aws_instance" "first-server" {
+  ami           = "ami-05ffe3c48a9991133"
+  instance_type = "t2.micro"
+
+  tags = {
+    Name = "amazon_linux"
+  }
+}
+</pre>
+
+
+        <h3>Results</h3>
+<ul>
+    <li>Terraform successfully initialized and validated the configuration</li>
+    <li>EC2 instance launched in <strong>us-east-1</strong> region</li>
+    <li>Instance verified in AWS Console</li>
+</ul>
+
+<div class="task-images">
+    <img src="terraform-ec2-init.png" alt="Terraform init success" />
+    <img src="terraform-ec2-applied.png" alt="Terraform apply completed" />
+    <img src="ec2-instance-running.png" alt="EC2 instance running" />
+</div>
+
+
+        <h3>Future Improvements</h3>
+        <p>Extend the configuration with additional resources like security groups, key pairs, or outputs. Integrate with version control for better collaboration and repeatability.</p>
+    </div>
+</div>
+
+            <div id="task-2" class="task-content">
+    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+    <div class="task-detail">
+        <h2>Task 02: Secure Ubuntu EC2 Instance</h2>
+
+        <h3>Overview</h3>
+        <p>This task involved provisioning a secure Ubuntu EC2 instance on AWS using Terraform. The instance was configured to allow SSH (port 22) and HTTPS (port 443) access via a custom security group in the default VPC.</p>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li>Fetch latest Ubuntu 22.04 AMI dynamically</li>
+            <li>Launch t2.micro EC2 instance with public IP</li>
+            <li>Custom security group with SSH and HTTPS access</li>
+            <li>Uses AWS default VPC</li>
+            <li>Key pair integration for SSH login</li>
+        </ul>
+
+        <h3>Technical Stack</h3>
+        <p>Terraform was used to write infrastructure as code. AWS services used include EC2, VPC, and IAM. Security rules were configured with fine-grained ingress and egress controls.</p>
+
+        <h3>Performance & Access</h3>
+        <ul>
+            <li>Instance running in <strong>us-east-1</strong> region</li>
+            <li>SSH accessible via specified key pair</li>
+            <li>HTTPS allowed on IPv4 and IPv6</li>
+        </ul>
+
+        <h3>Applications</h3>
+        <p>This type of setup is ideal for web servers, testing Linux configurations, and hosting secure apps during development.</p>
+
+        <h3>Terraform Code</h3>
+        <button class="code-toggle" onclick="toggleCode2()">Show Code</button>
+        <pre id="terraform-code-2" class="code-block" style="display: none;">
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "YOUR_ACCESS_KEY"
+  secret_key = "YOUR_SECRET_KEY"
+}
+
+data "aws_vpc" "default" {
+  default = true
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
+  }
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+  owners = ["099720109477"]
+}
+
+resource "aws_security_group" "allow_tls" {
+  name        = "allow_tls"
+  description = "Allow SSH and HTTPS"
+  vpc_id      = data.aws_vpc.default.id
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 443
+  to_port           = 443
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all" {
+  security_group_id = aws_security_group.allow_tls.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+resource "aws_instance" "secure_ubuntu" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = [aws_security_group.allow_tls.id]
+  associate_public_ip_address = true
+  key_name                    = "your-key-name"
+
+  tags = {
+    Name = "SecureUbuntuInstance"
+  }
+}
+        </pre>
+    </div>
+</div>
+
+
+            <div id="task-3" class="task-content">
+                <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+                <div class="task-detail">
+                    <h2>Task 03: Manipulation Control</h2>
+                    
+                    <h3>Overview</h3>
+                    <p>Advanced robotic arm control system designed for precise manipulation tasks. The system combines kinematic modeling, force control, and computer vision for accurate object handling.</p>
+                    
+                    <h3>Current Development</h3>
+                    <ul>
+                        <li>6-DOF robotic arm kinematics</li>
+                        <li>Inverse kinematics solver</li>
+                        <li>PID control for joint positioning</li>
+                        <li>Force feedback integration</li>
+                        <li>Trajectory planning algorithms</li>
+                        <li>Gripper control system</li>
+                    </ul>
+                    
+                    <h3>Technical Challenges</h3>
+                    <p>The main challenges include handling singularities in inverse kinematics, implementing smooth trajectory generation, and integrating tactile feedback for delicate manipulation tasks.</p>
+                    
+                    <h3>Progress Status</h3>
+                    <ul>
+                        <li>✅ Kinematic modeling complete</li>
+                        <li>✅ Basic positioning control implemented</li>
+                        <li>🔄 Force control integration in progress</li>
+                        <li>⏳ Vision-guided manipulation pending</li>
+                    </ul>
+                    
+                    <h3>Expected Outcomes</h3>
+                    <p>The completed system will enable precise pick-and-place operations with sub-millimeter accuracy and adaptive force control for handling fragile objects.</p>
+                </div>
+            </div>
+
+            <div id="task-4" class="task-content">
+                <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+                <div class="task-detail">
+                    <h2>Task 04: Swarm Intelligence</h2>
+                    
+                    <h3>Overview</h3>
+                    <p>Multi-robot coordination system that enables a group of robots to work together using distributed intelligence and emergent behavior patterns.</p>
+                    
+                    <h3>Planned Features</h3>
+                    <ul>
+                        <li>Distributed consensus algorithms</li>
+                        <li>Formation control and maintenance</li>
+                        <li>Task allocation and scheduling</li>
+                        <li>Inter-robot communication protocols</li>
+                        <li>Emergent behavior modeling</li>
+                        <li>Fault tolerance and redundancy</li>
+                    </ul>
+                    
+                    <h3>Research Areas</h3>
+                    <p>The project explores bio-inspired algorithms including ant colony optimization, particle swarm optimization, and flocking behaviors adapted for robotic systems.</p>
+                    
+                    <h3>Technical Approach</h3>
+                    <ul>
+                        <li>Graph-based communication networks</li>
+                        <li>Distributed state estimation</li>
+                        <li>Consensus-based decision making</li>
+                        <li>Dynamic role assignment</li>
+                        <li>Scalable architecture design</li>
+                    </ul>
+                    
+                    <h3>Expected Applications</h3>
+                    <p>Search and rescue operations, environmental monitoring, warehouse automation, and large-scale construction projects requiring coordinated robotic efforts.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showSection(section) {
+            // Hide all main content sections
+            const mainSections = document.querySelectorAll('.main-content');
+            const taskSections = document.querySelectorAll('.task-content');
+            
+            mainSections.forEach(s => s.style.display = 'none');
+            taskSections.forEach(s => s.style.display = 'none');
+            
+            // Show selected section
+            document.getElementById(section).style.display = 'block';
+        }
+
+        function showTask(taskNumber) {
+            // Hide all sections
+            const mainSections = document.querySelectorAll('.main-content');
+            const taskSections = document.querySelectorAll('.task-content');
+            
+            mainSections.forEach(s => s.style.display = 'none');
+            taskSections.forEach(s => s.style.display = 'none');
+            
+            // Show selected task
+            document.getElementById(`task-${taskNumber}`).style.display = 'block';
+        }
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.task-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add click animations to buttons
+        document.querySelectorAll('.nav-btn, .back-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+    <script>
+  function toggleCode() {
+    const codeBlock = document.getElementById('terraform-code');
+    const button = document.querySelector('.code-toggle');
+    if (codeBlock.style.display === 'none') {
+      codeBlock.style.display = 'block';
+      button.textContent = 'Hide Code';
+    } else {
+      codeBlock.style.display = 'none';
+      button.textContent = 'Show Code';
+    }
+  }
+</script>
+<script>
+  function toggleCode2() {
+    const codeBlock = document.getElementById('terraform-code-2');
+    const button = document.querySelector('#task-2 .code-toggle');
+    if (codeBlock.style.display === 'none') {
+      codeBlock.style.display = 'block';
+      button.textContent = 'Hide Code';
+    } else {
+      codeBlock.style.display = 'none';
+      button.textContent = 'Show Code';
+    }
+  }
+</script>
+
+
+</body>
+</html>
