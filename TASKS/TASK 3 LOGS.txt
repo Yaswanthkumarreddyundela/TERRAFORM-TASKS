@@ -1,0 +1,1692 @@
+PS D:\downloads\PROJECTS\terraform> terraform plan
+aws_vpc_security_group_ingress_rule.allow_tls_ipv4: Refreshing state... [id=sgr-08adc9fb5e549c791]
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4: Refreshing state... [id=sgr-0c1999f0d61b86a76]
+aws_security_group.allow_tls: Refreshing state... [id=sg-0705f8d6a756b4022]
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6: Refreshing state... [id=sgr-0c77cc3a5831285cb]
+aws_vpc_security_group_ingress_rule.allow_ssh_ipv4: Refreshing state... [id=sgr-049760cdd2267c533]
+aws_vpc_security_group_ingress_rule.allow_tls_ipv6: Refreshing state... [id=sgr-0da5e2ad0239e5249]
+aws_instance.Sample_demo[0]: Refreshing state... [id=i-0522d51c73d92fa5f]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_athena_database.sample_db will be created
+  + resource "aws_athena_database" "sample_db" {
+      + bucket        = (known after apply)
+      + force_destroy = false
+      + id            = (known after apply)
+      + name          = "sampledb"
+      + region        = "us-east-1"
+    }
+
+  # aws_athena_named_query.example will be created
+  + resource "aws_athena_named_query" "example" {
+      + database  = "sampledb"
+      + id        = (known after apply)
+      + name      = "CreateSampleTable"
+      + query     = (known after apply)
+      + region    = "us-east-1"
+      + workgroup = "primary"
+    }
+
+  # aws_cloudformation_stack.ec2_stack will be created
+  + resource "aws_cloudformation_stack" "ec2_stack" {
+      + id            = (known after apply)
+      + name          = "MyEC2Stack"
+      + outputs       = (known after apply)
+      + parameters    = (known after apply)
+      + policy_body   = (known after apply)
+      + region        = "us-east-1"
+      + tags_all      = (known after apply)
+      + template_body = jsonencode(
+            {
+              + Resources = {
+                  + EC2Instance = {
+                      + Properties = {
+                          + ImageId      = "ami-0c02fb55956c7d316"
+                          + InstanceType = "t2.micro"
+                        }
+                      + Type       = "AWS::EC2::Instance"
+                    }
+                }
+            }
+        )
+    }
+
+  # aws_cloudtrail.main will be created
+  + resource "aws_cloudtrail" "main" {
+      + arn                           = (known after apply)
+      + enable_log_file_validation    = true
+      + enable_logging                = true
+      + home_region                   = (known after apply)
+      + id                            = (known after apply)
+      + include_global_service_events = true
+      + is_multi_region_trail         = true
+      + is_organization_trail         = false
+      + name                          = "cloudtrail"
+      + region                        = "us-east-1"
+      + s3_bucket_name                = (known after apply)
+      + sns_topic_arn                 = (known after apply)
+      + tags_all                      = (known after apply)
+    }
+
+  # aws_cloudwatch_metric_alarm.cpu_alarm will be created
+  + resource "aws_cloudwatch_metric_alarm" "cpu_alarm" {
+      + actions_enabled                       = true
+      + alarm_description                     = "This metric monitors EC2 CPU utilization"
+      + alarm_name                            = "high_cpu_alarm"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/EC2"
+      + period                                = 300
+      + region                                = "us-east-1"
+      + statistic                             = "Average"
+      + tags_all                              = (known after apply)
+      + threshold                             = 70
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_db_instance.default will be created
+  + resource "aws_db_instance" "default" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = (known after apply)
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = (known after apply)
+      + db_subnet_group_name                  = "main"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + domain_fqdn                           = (known after apply)
+      + endpoint                              = (known after apply)
+      + engine                                = "mysql"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = (known after apply)
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = "mydb"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t2.micro"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + region                                = "us-east-1"
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = (known after apply)
+      + tags_all                              = (known after apply)
+      + timezone                              = (known after apply)
+      + username                              = "admin"
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # aws_db_subnet_group.default will be created
+  + resource "aws_db_subnet_group" "default" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "main"
+      + name_prefix             = (known after apply)
+      + region                  = "us-east-1"
+      + subnet_ids              = (known after apply)
+      + supported_network_types = (known after apply)
+      + tags                    = {
+          + "Name" = "My DB subnet group"
+        }
+      + tags_all                = {
+          + "Name" = "My DB subnet group"
+        }
+      + vpc_id                  = (known after apply)
+    }
+
+  # aws_ebs_volume.extra_volume will be created
+  + resource "aws_ebs_volume" "extra_volume" {
+      + arn               = (known after apply)
+      + availability_zone = (known after apply)
+      + create_time       = (known after apply)
+      + encrypted         = (known after apply)
+      + final_snapshot    = false
+      + id                = (known after apply)
+      + iops              = (known after apply)
+      + kms_key_id        = (known after apply)
+      + region            = "us-east-1"
+      + size              = 10
+      + snapshot_id       = (known after apply)
+      + tags_all          = (known after apply)
+      + throughput        = (known after apply)
+      + type              = (known after apply)
+    }
+
+  # aws_iam_role.lambda_exec_role will be created
+  + resource "aws_iam_role" "lambda_exec_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                      + Sid       = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "lambda_exec_role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # aws_instance.Sample_demo[0] will be destroyed
+  # (because aws_instance.Sample_demo is not in configuration)
+  - resource "aws_instance" "Sample_demo" {
+      - ami                                  = "ami-03b371d239dfe4af4" -> null
+      - arn                                  = "arn:aws:ec2:eu-north-1:941377137007:instance/i-0522d51c73d92fa5f" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "eu-north-1b" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0522d51c73d92fa5f" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "abc" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-024932e9ed47be4ce" -> null
+      - private_dns                          = "ip-172-31-33-174.eu-north-1.compute.internal" -> null
+      - private_ip                           = "172.31.33.174" -> null
+      - public_dns                           = "ec2-13-51-146-6.eu-north-1.compute.amazonaws.com" -> null
+      - public_ip                            = "13.51.146.6" -> null
+      - region                               = "eu-north-1" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "allow_tls",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-008f58a2ee8326b24" -> null
+      - tags                                 = {
+          - "Name" = "EC2_Without_AMI"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "EC2_Without_AMI"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-0705f8d6a756b4022",
+        ] -> null
+        # (7 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count       = 1 -> null
+          - threads_per_core = 2 -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 1 -> null
+          - http_tokens                 = "optional" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/sda1" -> null
+          - encrypted             = false -> null
+          - iops                  = 100 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 0 -> null
+          - volume_id             = "vol-01343abfaa455a179" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp2" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.example will be created
+  + resource "aws_instance" "example" {
+      + ami                                  = "ami-0c02fb55956c7d316"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = true
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Terraform-EC2"
+        }
+      + tags_all                             = {
+          + "Name" = "Terraform-EC2"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device (known after apply)
+    }
+
+  # aws_internet_gateway.gw will be created
+  + resource "aws_internet_gateway" "gw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-1"
+      + tags_all = (known after apply)
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_lambda_function.hello_world will be created
+  + resource "aws_lambda_function" "hello_world" {
+      + architectures                  = (known after apply)
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + filename                       = "lambda_function_payload.zip"
+      + function_name                  = "HelloWorldFunction"
+      + handler                        = "lambda_function.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + last_modified                  = (known after apply)
+      + memory_size                    = 128
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "us-east-1"
+      + reserved_concurrent_executions = -1
+      + role                           = (known after apply)
+      + runtime                        = "python3.9"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = "OrDYCKaJART7UEo2GrivDjdiHVtAeCH7Y9CWzhP1zp8="
+      + source_code_size               = (known after apply)
+      + tags_all                       = (known after apply)
+      + timeout                        = 3
+      + version                        = (known after apply)
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config (known after apply)
+
+      + tracing_config (known after apply)
+    }
+
+  # aws_route.internet_access will be created
+  + resource "aws_route" "internet_access" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-1"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route_table.rt will be created
+  + resource "aws_route_table" "rt" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-1"
+      + route            = (known after apply)
+      + tags_all         = (known after apply)
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.a will be created
+  + resource "aws_route_table_association" "a" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_s3_bucket.private_bucket will be created
+  + resource "aws_s3_bucket" "private_bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Name" = "PrivateBucket"
+        }
+      + tags_all                    = {
+          + "Name" = "PrivateBucket"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket.trail_bucket will be created
+  + resource "aws_s3_bucket" "trail_bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags_all                    = (known after apply)
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_acl.acl will be created
+  + resource "aws_s3_bucket_acl" "acl" {
+      + acl    = "private"
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "us-east-1"
+
+      + access_control_policy (known after apply)
+    }
+
+  # aws_s3_bucket_versioning.versioning will be created
+  + resource "aws_s3_bucket_versioning" "versioning" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "us-east-1"
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+  # aws_security_group.allow_tls will be destroyed
+  # (because aws_security_group.allow_tls is not in configuration)
+  - resource "aws_security_group" "allow_tls" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group/sg-0705f8d6a756b4022" -> null
+      - description            = "Allow TLS inbound traffic and all outbound traffic" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0705f8d6a756b4022" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 22
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          - {
+              - cidr_blocks      = [
+                  - "172.31.0.0/16",
+                ]
+              - from_port        = 443
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 443
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "allow_tls" -> null
+      - owner_id               = "941377137007" -> null
+      - region                 = "eu-north-1" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "allow_tls"
+        } -> null
+      - tags_all               = {
+          - "Name" = "allow_tls"
+        } -> null
+      - vpc_id                 = "vpc-008de4b465fe3117a" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.public will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags_all                                       = (known after apply)
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_volume_attachment.ebs_att will be created
+  + resource "aws_volume_attachment" "ebs_att" {
+      + device_name = "/dev/sdh"
+      + id          = (known after apply)
+      + instance_id = (known after apply)
+      + region      = "us-east-1"
+      + volume_id   = (known after apply)
+    }
+
+  # aws_vpc.custom will be created
+  + resource "aws_vpc" "custom" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "us-east-1"
+      + tags                                 = {
+          + "Name" = "custom-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "custom-vpc"
+        }
+    }
+
+  # aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4 will be destroyed
+  # (because aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0c1999f0d61b86a76" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - id                     = "sgr-0c1999f0d61b86a76" -> null
+      - ip_protocol            = "-1" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0c1999f0d61b86a76" -> null
+      - tags_all               = {} -> null
+    }
+
+  # aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6 will be destroyed
+  # (because aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6 is not in configuration)
+  - resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0c77cc3a5831285cb" -> null
+      - cidr_ipv6              = "::/0" -> null
+      - id                     = "sgr-0c77cc3a5831285cb" -> null
+      - ip_protocol            = "-1" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0c77cc3a5831285cb" -> null
+      - tags_all               = {} -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_ssh_ipv4 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_ssh_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-049760cdd2267c533" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = 22 -> null
+      - id                     = "sgr-049760cdd2267c533" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-049760cdd2267c533" -> null
+      - tags_all               = {} -> null
+      - to_port                = 22 -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_tls_ipv4 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_tls_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-08adc9fb5e549c791" -> null
+      - cidr_ipv4              = "172.31.0.0/16" -> null
+      - from_port              = 443 -> null
+      - id                     = "sgr-08adc9fb5e549c791" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-08adc9fb5e549c791" -> null
+      - tags_all               = {} -> null
+      - to_port                = 443 -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_tls_ipv6 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_tls_ipv6 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0da5e2ad0239e5249" -> null
+      - cidr_ipv6              = "::/0" -> null
+      - from_port              = 443 -> null
+      - id                     = "sgr-0da5e2ad0239e5249" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0da5e2ad0239e5249" -> null
+      - tags_all               = {} -> null
+      - to_port                = 443 -> null
+    }
+
+  # random_id.bucket_id will be created
+  + resource "random_id" "bucket_id" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+  # random_id.trail will be created
+  + resource "random_id" "trail" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 24 to add, 0 to change, 7 to destroy.
+
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
+PS D:\downloads\PROJECTS\terraform> terraform apply
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4: Refreshing state... [id=sgr-0c1999f0d61b86a76]
+aws_security_group.allow_tls: Refreshing state... [id=sg-0705f8d6a756b4022]
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6: Refreshing state... [id=sgr-0c77cc3a5831285cb]
+aws_vpc_security_group_ingress_rule.allow_ssh_ipv4: Refreshing state... [id=sgr-049760cdd2267c533]
+aws_vpc_security_group_ingress_rule.allow_tls_ipv6: Refreshing state... [id=sgr-0da5e2ad0239e5249]
+aws_vpc_security_group_ingress_rule.allow_tls_ipv4: Refreshing state... [id=sgr-08adc9fb5e549c791]
+aws_instance.Sample_demo[0]: Refreshing state... [id=i-0522d51c73d92fa5f]
+
+Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  + create
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_athena_database.sample_db will be created
+  + resource "aws_athena_database" "sample_db" {
+      + bucket        = (known after apply)
+      + force_destroy = false
+      + id            = (known after apply)
+      + name          = "sampledb"
+      + region        = "us-east-1"
+    }
+
+  # aws_athena_named_query.example will be created
+  + resource "aws_athena_named_query" "example" {
+      + database  = "sampledb"
+      + id        = (known after apply)
+      + name      = "CreateSampleTable"
+      + query     = (known after apply)
+      + region    = "us-east-1"
+      + workgroup = "primary"
+    }
+
+  # aws_cloudformation_stack.ec2_stack will be created
+  + resource "aws_cloudformation_stack" "ec2_stack" {
+      + id            = (known after apply)
+      + name          = "MyEC2Stack"
+      + outputs       = (known after apply)
+      + parameters    = (known after apply)
+      + policy_body   = (known after apply)
+      + region        = "us-east-1"
+      + tags_all      = (known after apply)
+      + template_body = jsonencode(
+            {
+              + Resources = {
+                  + EC2Instance = {
+                      + Properties = {
+                          + ImageId      = "ami-0c02fb55956c7d316"
+                          + InstanceType = "t2.micro"
+                        }
+                      + Type       = "AWS::EC2::Instance"
+                    }
+                }
+            }
+        )
+    }
+
+  # aws_cloudtrail.main will be created
+  + resource "aws_cloudtrail" "main" {
+      + arn                           = (known after apply)
+      + enable_log_file_validation    = true
+      + enable_logging                = true
+      + home_region                   = (known after apply)
+      + id                            = (known after apply)
+      + include_global_service_events = true
+      + is_multi_region_trail         = true
+      + is_organization_trail         = false
+      + name                          = "cloudtrail"
+      + region                        = "us-east-1"
+      + s3_bucket_name                = (known after apply)
+      + sns_topic_arn                 = (known after apply)
+      + tags_all                      = (known after apply)
+    }
+
+  # aws_cloudwatch_metric_alarm.cpu_alarm will be created
+  + resource "aws_cloudwatch_metric_alarm" "cpu_alarm" {
+      + actions_enabled                       = true
+      + alarm_description                     = "This metric monitors EC2 CPU utilization"
+      + alarm_name                            = "high_cpu_alarm"
+      + arn                                   = (known after apply)
+      + comparison_operator                   = "GreaterThanThreshold"
+      + dimensions                            = (known after apply)
+      + evaluate_low_sample_count_percentiles = (known after apply)
+      + evaluation_periods                    = 1
+      + id                                    = (known after apply)
+      + metric_name                           = "CPUUtilization"
+      + namespace                             = "AWS/EC2"
+      + period                                = 300
+      + region                                = "us-east-1"
+      + statistic                             = "Average"
+      + tags_all                              = (known after apply)
+      + threshold                             = 70
+      + treat_missing_data                    = "missing"
+    }
+
+  # aws_db_instance.default will be created
+  + resource "aws_db_instance" "default" {
+      + address                               = (known after apply)
+      + allocated_storage                     = 20
+      + apply_immediately                     = false
+      + arn                                   = (known after apply)
+      + auto_minor_version_upgrade            = true
+      + availability_zone                     = (known after apply)
+      + backup_retention_period               = (known after apply)
+      + backup_target                         = (known after apply)
+      + backup_window                         = (known after apply)
+      + ca_cert_identifier                    = (known after apply)
+      + character_set_name                    = (known after apply)
+      + copy_tags_to_snapshot                 = false
+      + database_insights_mode                = (known after apply)
+      + db_name                               = (known after apply)
+      + db_subnet_group_name                  = "main"
+      + dedicated_log_volume                  = false
+      + delete_automated_backups              = true
+      + domain_fqdn                           = (known after apply)
+      + endpoint                              = (known after apply)
+      + engine                                = "mysql"
+      + engine_lifecycle_support              = (known after apply)
+      + engine_version                        = (known after apply)
+      + engine_version_actual                 = (known after apply)
+      + hosted_zone_id                        = (known after apply)
+      + id                                    = (known after apply)
+      + identifier                            = "mydb"
+      + identifier_prefix                     = (known after apply)
+      + instance_class                        = "db.t2.micro"
+      + iops                                  = (known after apply)
+      + kms_key_id                            = (known after apply)
+      + latest_restorable_time                = (known after apply)
+      + license_model                         = (known after apply)
+      + listener_endpoint                     = (known after apply)
+      + maintenance_window                    = (known after apply)
+      + master_user_secret                    = (known after apply)
+      + master_user_secret_kms_key_id         = (known after apply)
+      + monitoring_interval                   = 0
+      + monitoring_role_arn                   = (known after apply)
+      + multi_az                              = (known after apply)
+      + nchar_character_set_name              = (known after apply)
+      + network_type                          = (known after apply)
+      + option_group_name                     = (known after apply)
+      + parameter_group_name                  = (known after apply)
+      + password                              = (sensitive value)
+      + password_wo                           = (write-only attribute)
+      + performance_insights_enabled          = false
+      + performance_insights_kms_key_id       = (known after apply)
+      + performance_insights_retention_period = (known after apply)
+      + port                                  = (known after apply)
+      + publicly_accessible                   = false
+      + region                                = "us-east-1"
+      + replica_mode                          = (known after apply)
+      + replicas                              = (known after apply)
+      + resource_id                           = (known after apply)
+      + skip_final_snapshot                   = true
+      + snapshot_identifier                   = (known after apply)
+      + status                                = (known after apply)
+      + storage_throughput                    = (known after apply)
+      + storage_type                          = (known after apply)
+      + tags_all                              = (known after apply)
+      + timezone                              = (known after apply)
+      + username                              = "admin"
+      + vpc_security_group_ids                = (known after apply)
+    }
+
+  # aws_db_subnet_group.default will be created
+  + resource "aws_db_subnet_group" "default" {
+      + arn                     = (known after apply)
+      + description             = "Managed by Terraform"
+      + id                      = (known after apply)
+      + name                    = "main"
+      + name_prefix             = (known after apply)
+      + region                  = "us-east-1"
+      + subnet_ids              = (known after apply)
+      + supported_network_types = (known after apply)
+      + tags                    = {
+          + "Name" = "My DB subnet group"
+        }
+      + tags_all                = {
+          + "Name" = "My DB subnet group"
+        }
+      + vpc_id                  = (known after apply)
+    }
+
+  # aws_ebs_volume.extra_volume will be created
+  + resource "aws_ebs_volume" "extra_volume" {
+      + arn               = (known after apply)
+      + availability_zone = (known after apply)
+      + create_time       = (known after apply)
+      + encrypted         = (known after apply)
+      + final_snapshot    = false
+      + id                = (known after apply)
+      + iops              = (known after apply)
+      + kms_key_id        = (known after apply)
+      + region            = "us-east-1"
+      + size              = 10
+      + snapshot_id       = (known after apply)
+      + tags_all          = (known after apply)
+      + throughput        = (known after apply)
+      + type              = (known after apply)
+    }
+
+  # aws_iam_role.lambda_exec_role will be created
+  + resource "aws_iam_role" "lambda_exec_role" {
+      + arn                   = (known after apply)
+      + assume_role_policy    = jsonencode(
+            {
+              + Statement = [
+                  + {
+                      + Action    = "sts:AssumeRole"
+                      + Effect    = "Allow"
+                      + Principal = {
+                          + Service = "lambda.amazonaws.com"
+                        }
+                      + Sid       = ""
+                    },
+                ]
+              + Version   = "2012-10-17"
+            }
+        )
+      + create_date           = (known after apply)
+      + force_detach_policies = false
+      + id                    = (known after apply)
+      + managed_policy_arns   = (known after apply)
+      + max_session_duration  = 3600
+      + name                  = "lambda_exec_role"
+      + name_prefix           = (known after apply)
+      + path                  = "/"
+      + tags_all              = (known after apply)
+      + unique_id             = (known after apply)
+
+      + inline_policy (known after apply)
+    }
+
+  # aws_instance.Sample_demo[0] will be destroyed
+  # (because aws_instance.Sample_demo is not in configuration)
+  - resource "aws_instance" "Sample_demo" {
+      - ami                                  = "ami-03b371d239dfe4af4" -> null
+      - arn                                  = "arn:aws:ec2:eu-north-1:941377137007:instance/i-0522d51c73d92fa5f" -> null
+      - associate_public_ip_address          = true -> null
+      - availability_zone                    = "eu-north-1b" -> null
+      - disable_api_stop                     = false -> null
+      - disable_api_termination              = false -> null
+      - ebs_optimized                        = false -> null
+      - get_password_data                    = false -> null
+      - hibernation                          = false -> null
+      - id                                   = "i-0522d51c73d92fa5f" -> null
+      - instance_initiated_shutdown_behavior = "stop" -> null
+      - instance_state                       = "running" -> null
+      - instance_type                        = "t3.micro" -> null
+      - ipv6_address_count                   = 0 -> null
+      - ipv6_addresses                       = [] -> null
+      - key_name                             = "abc" -> null
+      - monitoring                           = false -> null
+      - placement_partition_number           = 0 -> null
+      - primary_network_interface_id         = "eni-024932e9ed47be4ce" -> null
+      - private_dns                          = "ip-172-31-33-174.eu-north-1.compute.internal" -> null
+      - private_ip                           = "172.31.33.174" -> null
+      - public_dns                           = "ec2-13-51-146-6.eu-north-1.compute.amazonaws.com" -> null
+      - public_ip                            = "13.51.146.6" -> null
+      - region                               = "eu-north-1" -> null
+      - secondary_private_ips                = [] -> null
+      - security_groups                      = [
+          - "allow_tls",
+        ] -> null
+      - source_dest_check                    = true -> null
+      - subnet_id                            = "subnet-008f58a2ee8326b24" -> null
+      - tags                                 = {
+          - "Name" = "EC2_Without_AMI"
+        } -> null
+      - tags_all                             = {
+          - "Name" = "EC2_Without_AMI"
+        } -> null
+      - tenancy                              = "default" -> null
+      - user_data_replace_on_change          = false -> null
+      - vpc_security_group_ids               = [
+          - "sg-0705f8d6a756b4022",
+        ] -> null
+        # (7 unchanged attributes hidden)
+
+      - capacity_reservation_specification {
+          - capacity_reservation_preference = "open" -> null
+        }
+
+      - cpu_options {
+          - core_count       = 1 -> null
+          - threads_per_core = 2 -> null
+            # (1 unchanged attribute hidden)
+        }
+
+      - credit_specification {
+          - cpu_credits = "unlimited" -> null
+        }
+
+      - enclave_options {
+          - enabled = false -> null
+        }
+
+      - maintenance_options {
+          - auto_recovery = "default" -> null
+        }
+
+      - metadata_options {
+          - http_endpoint               = "enabled" -> null
+          - http_protocol_ipv6          = "disabled" -> null
+          - http_put_response_hop_limit = 1 -> null
+          - http_tokens                 = "optional" -> null
+          - instance_metadata_tags      = "disabled" -> null
+        }
+
+      - private_dns_name_options {
+          - enable_resource_name_dns_a_record    = false -> null
+          - enable_resource_name_dns_aaaa_record = false -> null
+          - hostname_type                        = "ip-name" -> null
+        }
+
+      - root_block_device {
+          - delete_on_termination = true -> null
+          - device_name           = "/dev/sda1" -> null
+          - encrypted             = false -> null
+          - iops                  = 100 -> null
+          - tags                  = {} -> null
+          - tags_all              = {} -> null
+          - throughput            = 0 -> null
+          - volume_id             = "vol-01343abfaa455a179" -> null
+          - volume_size           = 8 -> null
+          - volume_type           = "gp2" -> null
+            # (1 unchanged attribute hidden)
+        }
+    }
+
+  # aws_instance.example will be created
+  + resource "aws_instance" "example" {
+      + ami                                  = "ami-0c02fb55956c7d316"
+      + arn                                  = (known after apply)
+      + associate_public_ip_address          = true
+      + availability_zone                    = (known after apply)
+      + disable_api_stop                     = (known after apply)
+      + disable_api_termination              = (known after apply)
+      + ebs_optimized                        = (known after apply)
+      + enable_primary_ipv6                  = (known after apply)
+      + get_password_data                    = false
+      + host_id                              = (known after apply)
+      + host_resource_group_arn              = (known after apply)
+      + iam_instance_profile                 = (known after apply)
+      + id                                   = (known after apply)
+      + instance_initiated_shutdown_behavior = (known after apply)
+      + instance_lifecycle                   = (known after apply)
+      + instance_state                       = (known after apply)
+      + instance_type                        = "t2.micro"
+      + ipv6_address_count                   = (known after apply)
+      + ipv6_addresses                       = (known after apply)
+      + key_name                             = (known after apply)
+      + monitoring                           = (known after apply)
+      + outpost_arn                          = (known after apply)
+      + password_data                        = (known after apply)
+      + placement_group                      = (known after apply)
+      + placement_partition_number           = (known after apply)
+      + primary_network_interface_id         = (known after apply)
+      + private_dns                          = (known after apply)
+      + private_ip                           = (known after apply)
+      + public_dns                           = (known after apply)
+      + public_ip                            = (known after apply)
+      + region                               = "us-east-1"
+      + secondary_private_ips                = (known after apply)
+      + security_groups                      = (known after apply)
+      + source_dest_check                    = true
+      + spot_instance_request_id             = (known after apply)
+      + subnet_id                            = (known after apply)
+      + tags                                 = {
+          + "Name" = "Terraform-EC2"
+        }
+      + tags_all                             = {
+          + "Name" = "Terraform-EC2"
+        }
+      + tenancy                              = (known after apply)
+      + user_data_base64                     = (known after apply)
+      + user_data_replace_on_change          = false
+      + vpc_security_group_ids               = (known after apply)
+
+      + capacity_reservation_specification (known after apply)
+
+      + cpu_options (known after apply)
+
+      + ebs_block_device (known after apply)
+
+      + enclave_options (known after apply)
+
+      + ephemeral_block_device (known after apply)
+
+      + instance_market_options (known after apply)
+
+      + maintenance_options (known after apply)
+
+      + metadata_options (known after apply)
+
+      + network_interface (known after apply)
+
+      + private_dns_name_options (known after apply)
+
+      + root_block_device (known after apply)
+    }
+
+  # aws_internet_gateway.gw will be created
+  + resource "aws_internet_gateway" "gw" {
+      + arn      = (known after apply)
+      + id       = (known after apply)
+      + owner_id = (known after apply)
+      + region   = "us-east-1"
+      + tags_all = (known after apply)
+      + vpc_id   = (known after apply)
+    }
+
+  # aws_lambda_function.hello_world will be created
+  + resource "aws_lambda_function" "hello_world" {
+      + architectures                  = (known after apply)
+      + arn                            = (known after apply)
+      + code_sha256                    = (known after apply)
+      + filename                       = "lambda_function_payload.zip"
+      + function_name                  = "HelloWorldFunction"
+      + handler                        = "lambda_function.lambda_handler"
+      + id                             = (known after apply)
+      + invoke_arn                     = (known after apply)
+      + last_modified                  = (known after apply)
+      + memory_size                    = 128
+      + package_type                   = "Zip"
+      + publish                        = false
+      + qualified_arn                  = (known after apply)
+      + qualified_invoke_arn           = (known after apply)
+      + region                         = "us-east-1"
+      + reserved_concurrent_executions = -1
+      + role                           = (known after apply)
+      + runtime                        = "python3.9"
+      + signing_job_arn                = (known after apply)
+      + signing_profile_version_arn    = (known after apply)
+      + skip_destroy                   = false
+      + source_code_hash               = "OrDYCKaJART7UEo2GrivDjdiHVtAeCH7Y9CWzhP1zp8="
+      + source_code_size               = (known after apply)
+      + tags_all                       = (known after apply)
+      + timeout                        = 3
+      + version                        = (known after apply)
+
+      + ephemeral_storage (known after apply)
+
+      + logging_config (known after apply)
+
+      + tracing_config (known after apply)
+    }
+
+  # aws_route.internet_access will be created
+  + resource "aws_route" "internet_access" {
+      + destination_cidr_block = "0.0.0.0/0"
+      + gateway_id             = (known after apply)
+      + id                     = (known after apply)
+      + instance_id            = (known after apply)
+      + instance_owner_id      = (known after apply)
+      + network_interface_id   = (known after apply)
+      + origin                 = (known after apply)
+      + region                 = "us-east-1"
+      + route_table_id         = (known after apply)
+      + state                  = (known after apply)
+    }
+
+  # aws_route_table.rt will be created
+  + resource "aws_route_table" "rt" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "us-east-1"
+      + route            = (known after apply)
+      + tags_all         = (known after apply)
+      + vpc_id           = (known after apply)
+    }
+
+  # aws_route_table_association.a will be created
+  + resource "aws_route_table_association" "a" {
+      + id             = (known after apply)
+      + region         = "us-east-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # aws_s3_bucket.private_bucket will be created
+  + resource "aws_s3_bucket" "private_bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags                        = {
+          + "Name" = "PrivateBucket"
+        }
+      + tags_all                    = {
+          + "Name" = "PrivateBucket"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket.trail_bucket will be created
+  + resource "aws_s3_bucket" "trail_bucket" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = (known after apply)
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_region               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = false
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = "us-east-1"
+      + request_payer               = (known after apply)
+      + tags_all                    = (known after apply)
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_acl.acl will be created
+  + resource "aws_s3_bucket_acl" "acl" {
+      + acl    = "private"
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "us-east-1"
+
+      + access_control_policy (known after apply)
+    }
+
+  # aws_s3_bucket_versioning.versioning will be created
+  + resource "aws_s3_bucket_versioning" "versioning" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+      + region = "us-east-1"
+
+      + versioning_configuration {
+          + mfa_delete = (known after apply)
+          + status     = "Enabled"
+        }
+    }
+
+  # aws_security_group.allow_tls will be destroyed
+  # (because aws_security_group.allow_tls is not in configuration)
+  - resource "aws_security_group" "allow_tls" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group/sg-0705f8d6a756b4022" -> null
+      - description            = "Allow TLS inbound traffic and all outbound traffic" -> null
+      - egress                 = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 0
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "-1"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 0
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - id                     = "sg-0705f8d6a756b4022" -> null
+      - ingress                = [
+          - {
+              - cidr_blocks      = [
+                  - "0.0.0.0/0",
+                ]
+              - from_port        = 22
+              - ipv6_cidr_blocks = []
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 22
+                # (1 unchanged attribute hidden)
+            },
+          - {
+              - cidr_blocks      = [
+                  - "172.31.0.0/16",
+                ]
+              - from_port        = 443
+              - ipv6_cidr_blocks = [
+                  - "::/0",
+                ]
+              - prefix_list_ids  = []
+              - protocol         = "tcp"
+              - security_groups  = []
+              - self             = false
+              - to_port          = 443
+                # (1 unchanged attribute hidden)
+            },
+        ] -> null
+      - name                   = "allow_tls" -> null
+      - owner_id               = "941377137007" -> null
+      - region                 = "eu-north-1" -> null
+      - revoke_rules_on_delete = false -> null
+      - tags                   = {
+          - "Name" = "allow_tls"
+        } -> null
+      - tags_all               = {
+          - "Name" = "allow_tls"
+        } -> null
+      - vpc_id                 = "vpc-008de4b465fe3117a" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_subnet.public will be created
+  + resource "aws_subnet" "public" {
+      + arn                                            = (known after apply)
+      + assign_ipv6_address_on_creation                = false
+      + availability_zone                              = "us-east-1a"
+      + availability_zone_id                           = (known after apply)
+      + cidr_block                                     = "10.0.1.0/24"
+      + enable_dns64                                   = false
+      + enable_resource_name_dns_a_record_on_launch    = false
+      + enable_resource_name_dns_aaaa_record_on_launch = false
+      + id                                             = (known after apply)
+      + ipv6_cidr_block_association_id                 = (known after apply)
+      + ipv6_native                                    = false
+      + map_public_ip_on_launch                        = true
+      + owner_id                                       = (known after apply)
+      + private_dns_hostname_type_on_launch            = (known after apply)
+      + region                                         = "us-east-1"
+      + tags_all                                       = (known after apply)
+      + vpc_id                                         = (known after apply)
+    }
+
+  # aws_volume_attachment.ebs_att will be created
+  + resource "aws_volume_attachment" "ebs_att" {
+      + device_name = "/dev/sdh"
+      + id          = (known after apply)
+      + instance_id = (known after apply)
+      + region      = "us-east-1"
+      + volume_id   = (known after apply)
+    }
+
+  # aws_vpc.custom will be created
+  + resource "aws_vpc" "custom" {
+      + arn                                  = (known after apply)
+      + cidr_block                           = "10.0.0.0/16"
+      + default_network_acl_id               = (known after apply)
+      + default_route_table_id               = (known after apply)
+      + default_security_group_id            = (known after apply)
+      + dhcp_options_id                      = (known after apply)
+      + enable_dns_hostnames                 = true
+      + enable_dns_support                   = true
+      + enable_network_address_usage_metrics = (known after apply)
+      + id                                   = (known after apply)
+      + instance_tenancy                     = "default"
+      + ipv6_association_id                  = (known after apply)
+      + ipv6_cidr_block                      = (known after apply)
+      + ipv6_cidr_block_network_border_group = (known after apply)
+      + main_route_table_id                  = (known after apply)
+      + owner_id                             = (known after apply)
+      + region                               = "us-east-1"
+      + tags                                 = {
+          + "Name" = "custom-vpc"
+        }
+      + tags_all                             = {
+          + "Name" = "custom-vpc"
+        }
+    }
+
+  # aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4 will be destroyed
+  # (because aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0c1999f0d61b86a76" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - id                     = "sgr-0c1999f0d61b86a76" -> null
+      - ip_protocol            = "-1" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0c1999f0d61b86a76" -> null
+      - tags_all               = {} -> null
+    }
+
+  # aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6 will be destroyed
+  # (because aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6 is not in configuration)
+  - resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0c77cc3a5831285cb" -> null
+      - cidr_ipv6              = "::/0" -> null
+      - id                     = "sgr-0c77cc3a5831285cb" -> null
+      - ip_protocol            = "-1" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0c77cc3a5831285cb" -> null
+      - tags_all               = {} -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_ssh_ipv4 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_ssh_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_ssh_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-049760cdd2267c533" -> null
+      - cidr_ipv4              = "0.0.0.0/0" -> null
+      - from_port              = 22 -> null
+      - id                     = "sgr-049760cdd2267c533" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-049760cdd2267c533" -> null
+      - tags_all               = {} -> null
+      - to_port                = 22 -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_tls_ipv4 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_tls_ipv4 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv4" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-08adc9fb5e549c791" -> null
+      - cidr_ipv4              = "172.31.0.0/16" -> null
+      - from_port              = 443 -> null
+      - id                     = "sgr-08adc9fb5e549c791" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-08adc9fb5e549c791" -> null
+      - tags_all               = {} -> null
+      - to_port                = 443 -> null
+    }
+
+  # aws_vpc_security_group_ingress_rule.allow_tls_ipv6 will be destroyed
+  # (because aws_vpc_security_group_ingress_rule.allow_tls_ipv6 is not in configuration)
+  - resource "aws_vpc_security_group_ingress_rule" "allow_tls_ipv6" {
+      - arn                    = "arn:aws:ec2:eu-north-1:941377137007:security-group-rule/sgr-0da5e2ad0239e5249" -> null
+      - cidr_ipv6              = "::/0" -> null
+      - from_port              = 443 -> null
+      - id                     = "sgr-0da5e2ad0239e5249" -> null
+      - ip_protocol            = "tcp" -> null
+      - region                 = "eu-north-1" -> null
+      - security_group_id      = "sg-0705f8d6a756b4022" -> null
+      - security_group_rule_id = "sgr-0da5e2ad0239e5249" -> null
+      - tags_all               = {} -> null
+      - to_port                = 443 -> null
+    }
+
+  # random_id.bucket_id will be created
+  + resource "random_id" "bucket_id" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+  # random_id.trail will be created
+  + resource "random_id" "trail" {
+      + b64_std     = (known after apply)
+      + b64_url     = (known after apply)
+      + byte_length = 4
+      + dec         = (known after apply)
+      + hex         = (known after apply)
+      + id          = (known after apply)
+    }
+
+Plan: 24 to add, 0 to change, 7 to destroy.
+
+Do you want to perform these actions?
+  Terraform will perform the actions described above.
+  Only 'yes' will be accepted to approve.
+
+  Enter a value: yes
+
+random_id.bucket_id: Creating...
+random_id.trail: Creating...
+random_id.trail: Creation complete after 0s [id=9teR-Q]
+random_id.bucket_id: Creation complete after 0s [id=FuUVOA]
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6: Destroying... [id=sgr-0c77cc3a5831285cb]
+aws_vpc_security_group_ingress_rule.allow_tls_ipv4: Destroying... [id=sgr-08adc9fb5e549c791]
+aws_vpc_security_group_ingress_rule.allow_ssh_ipv4: Destroying... [id=sgr-049760cdd2267c533]
+aws_instance.Sample_demo[0]: Destroying... [id=i-0522d51c73d92fa5f]
+aws_vpc_security_group_ingress_rule.allow_tls_ipv6: Destroying... [id=sgr-0da5e2ad0239e5249]
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4: Destroying... [id=sgr-0c1999f0d61b86a76]
+aws_vpc.custom: Creating...
+aws_cloudformation_stack.ec2_stack: Creating...
+aws_s3_bucket.trail_bucket: Creating...
+aws_s3_bucket.private_bucket: Creating...
+aws_vpc_security_group_ingress_rule.allow_tls_ipv6: Destruction complete after 1s
+aws_iam_role.lambda_exec_role: Creating...
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv6: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.allow_ssh_ipv4: Destruction complete after 1s
+aws_vpc_security_group_egress_rule.allow_all_traffic_ipv4: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.allow_tls_ipv4: Destruction complete after 1s
+aws_iam_role.lambda_exec_role: Creation complete after 2s [id=lambda_exec_role]
+aws_lambda_function.hello_world: Creating...
+aws_s3_bucket.trail_bucket: Creation complete after 7s [id=cloudtrail-bucket-f6d791f9]
+aws_cloudtrail.main: Creating...
+aws_s3_bucket.private_bucket: Creation complete after 8s [id=my-private-versioned-bucket-16e51538]
+aws_athena_database.sample_db: Creating...
+aws_s3_bucket_versioning.versioning: Creating...
+aws_s3_bucket_acl.acl: Creating...
+aws_cloudformation_stack.ec2_stack: Still creating... [00m10s elapsed]
+aws_vpc.custom: Still creating... [00m10s elapsed]
+aws_instance.Sample_demo[0]: Still destroying... [id=i-0522d51c73d92fa5f, 00m10s elapsed]
+aws_s3_bucket_versioning.versioning: Creation complete after 2s [id=my-private-versioned-bucket-16e51538]
+aws_athena_database.sample_db: Creation complete after 5s [id=sampledb]
+aws_athena_named_query.example: Creating...
+aws_athena_named_query.example: Creation complete after 0s [id=e53f1d8f-508b-4fe8-9bd2-170ef8be73ab]
+aws_lambda_function.hello_world: Still creating... [00m10s elapsed]
+aws_lambda_function.hello_world: Creation complete after 13s [id=HelloWorldFunction]
+aws_vpc.custom: Creation complete after 17s [id=vpc-0b237266c4423105d]
+aws_route_table.rt: Creating...
+aws_internet_gateway.gw: Creating...
+aws_subnet.public: Creating...
+aws_internet_gateway.gw: Creation complete after 2s [id=igw-043847581711be9e9]
+aws_route_table.rt: Creation complete after 2s [id=rtb-030fbb260806ff445]
+aws_route.internet_access: Creating...
+aws_instance.Sample_demo[0]: Still destroying... [id=i-0522d51c73d92fa5f, 00m20s elapsed]
+aws_cloudformation_stack.ec2_stack: Still creating... [00m20s elapsed]
+aws_route.internet_access: Creation complete after 2s [id=r-rtb-030fbb260806ff4451080289494]
+aws_cloudformation_stack.ec2_stack: Creation complete after 22s [id=arn:aws:cloudformation:us-east-1:941377137007:stack/MyEC2Stack/178e34f0-5d5e-11f0-a414-0affdecd4441]
+aws_subnet.public: Still creating... [00m10s elapsed]
+aws_instance.Sample_demo[0]: Still destroying... [id=i-0522d51c73d92fa5f, 00m30s elapsed]
+aws_subnet.public: Creation complete after 13s [id=subnet-032be24d258cada6e]
+aws_route_table_association.a: Creating...
+aws_db_subnet_group.default: Creating...
+aws_instance.example: Creating...
+aws_route_table_association.a: Creation complete after 1s [id=rtbassoc-049353dd506d661a5]
+aws_instance.Sample_demo[0]: Still destroying... [id=i-0522d51c73d92fa5f, 00m40s elapsed]
+aws_instance.example: Still creating... [00m10s elapsed]
+aws_instance.Sample_demo[0]: Still destroying... [id=i-0522d51c73d92fa5f, 00m50s elapsed]
+aws_instance.example: Still creating... [00m20s elapsed]
+aws_instance.Sample_demo[0]: Destruction complete after 53s
+aws_security_group.allow_tls: Destroying... [id=sg-0705f8d6a756b4022]
+aws_security_group.allow_tls: Destruction complete after 1s
+aws_instance.example: Still creating... [00m30s elapsed]
+aws_instance.example: Creation complete after 38s [id=i-06443fe2245717568]
+aws_ebs_volume.extra_volume: Creating...
+aws_cloudwatch_metric_alarm.cpu_alarm: Creating...
+aws_cloudwatch_metric_alarm.cpu_alarm: Creation complete after 3s [id=high_cpu_alarm]
+aws_ebs_volume.extra_volume: Still creating... [00m10s elapsed]
+aws_ebs_volume.extra_volume: Creation complete after 11s [id=vol-0fab69bd993c8c2c4]
+aws_volume_attachment.ebs_att: Creating...
+aws_volume_attachment.ebs_att: Still creating... [00m10s elapsed]
+aws_volume_attachment.ebs_att: Still creating... [00m20s elapsed]
+aws_volume_attachment.ebs_att: Creation complete after 22s [id=vai-513684850]
