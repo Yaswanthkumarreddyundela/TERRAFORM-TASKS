@@ -515,7 +515,7 @@
             <div id="tasks" class="main-content" style="display: none;">
                 <div class="about-section">
                     <h2>All Tasks Overview</h2>
-                    <p>Here's a comprehensive overview of all robotic tasks in my documentation system. Each task represents a different aspect of robotic automation and intelligence.</p>
+                    <p>Here’s a comprehensive overview of all AWS infrastructure tasks I have successfully completed using Terraform and the AWS Console. Each task showcases different aspects of cloud provisioning, automation, and infrastructure-as-code implementation.</p>
                 </div>
 
                 <div class="task-grid">
@@ -609,9 +609,10 @@ resource "aws_instance" "first-server" {
 </ul>
 
 <div class="task-images">
-    <img src="terraform-ec2-init.png" alt="Terraform init success" />
-    <img src="terraform-ec2-applied.png" alt="Terraform apply completed" />
-    <img src="ec2-instance-running.png" alt="EC2 instance running" />
+    <img src="/TASKS/TASK1-INIT.png" alt="Terraform init success" style="width:300px; height:auto;" />
+<img src="TASKS/TASK1-APPLY.png" alt="Terraform apply completed" style="width:300px; height:auto;" />
+<img src="TASKS/TASK2-EC2.png" alt="EC2 instance running" style="width:300px; height:auto;" />
+
 </div>
 
 
@@ -716,80 +717,433 @@ resource "aws_instance" "secure_ubuntu" {
   }
 }
         </pre>
+
+        <div class="task-images">
+    <img src="/TASKS/TASK2-EC2.png" alt="Terraform init success" style="width:300px; height:auto;" />
+<img src="TASKS/TASK2-VPC.png" alt="Terraform apply completed" style="width:300px; height:auto;" />
+
+</div>
+
+
+        </div>
     </div>
 </div>
 
 
             <div id="task-3" class="task-content">
-                <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
-                <div class="task-detail">
-                    <h2>Task 03: Manipulation Control</h2>
-                    
-                    <h3>Overview</h3>
-                    <p>Advanced robotic arm control system designed for precise manipulation tasks. The system combines kinematic modeling, force control, and computer vision for accurate object handling.</p>
-                    
-                    <h3>Current Development</h3>
-                    <ul>
-                        <li>6-DOF robotic arm kinematics</li>
-                        <li>Inverse kinematics solver</li>
-                        <li>PID control for joint positioning</li>
-                        <li>Force feedback integration</li>
-                        <li>Trajectory planning algorithms</li>
-                        <li>Gripper control system</li>
-                    </ul>
-                    
-                    <h3>Technical Challenges</h3>
-                    <p>The main challenges include handling singularities in inverse kinematics, implementing smooth trajectory generation, and integrating tactile feedback for delicate manipulation tasks.</p>
-                    
-                    <h3>Progress Status</h3>
-                    <ul>
-                        <li>✅ Kinematic modeling complete</li>
-                        <li>✅ Basic positioning control implemented</li>
-                        <li>🔄 Force control integration in progress</li>
-                        <li>⏳ Vision-guided manipulation pending</li>
-                    </ul>
-                    
-                    <h3>Expected Outcomes</h3>
-                    <p>The completed system will enable precise pick-and-place operations with sub-millimeter accuracy and adaptive force control for handling fragile objects.</p>
-                </div>
-            </div>
+    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+    <div class="task-detail">
+        <h2>Task 03: AWS Infrastructure Deployment and Web Presentation</h2>
+
+        <h3>Overview</h3>
+        <p>
+            This task involved provisioning various AWS services using Terraform and the AWS Console, capturing proof of completion via screenshots, and deploying a web page using Vercel to present the results. It provided hands-on experience across compute, storage, networking, and monitoring services in AWS.
+        </p>
+
+        <h3>Tools Used</h3>
+        <ul>
+            <li>AWS Console & Terraform for provisioning infrastructure</li>
+            <li>Vercel for webpage deployment</li>
+            <li>Google Form for project submission</li>
+        </ul>
+
+        <h3>Resources Provisioned</h3>
+        <p>I created and configured the following AWS resources under the Free Tier:</p>
+        <ul>
+            <li><strong>EC2:</strong> Launched a <code>t2.micro</code> instance with Amazon Linux 2</li>
+            <li><strong>VPC:</strong> Created a custom VPC with one public subnet and an Internet Gateway</li>
+            <li><strong>Lambda:</strong> Deployed a simple "Hello World" function in Python</li>
+            <li><strong>S3:</strong> Created a private bucket with versioning enabled</li>
+            <li><strong>EBS:</strong> Attached a 10GB EBS volume to the EC2 instance</li>
+            <li><strong>RDS:</strong> Launched a <code>db.t2.micro</code> MySQL database instance</li>
+            <li><strong>Athena:</strong> Created a database and table using sample data from S3</li>
+            <li><strong>CloudWatch:</strong> Set up an alarm for EC2 CPU utilization greater than 70%</li>
+            <li><strong>CloudTrail:</strong> Enabled to track API activities in the AWS account</li>
+            <li><strong>CloudFormation:</strong> Used a basic template to deploy an EC2 instance</li>
+            <li><strong>CDK:</strong> Used AWS CDK in Python to provision an S3 bucket</li>
+        </ul>
+        <h3>Terraform Code</h3>
+        <button class="code-toggle" onclick="toggleCode3()">Show Code</button>
+        <pre id="terraform-code-3" class="code-block" style="display: none;"><code>
+provider "aws" {
+  region = "us-east-1"
+}
+
+# VPC + Subnet + IGW
+resource "aws_vpc" "custom" {
+  cidr_block           = "10.0.0.0/16"
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  tags = { Name = "custom-vpc" }
+}
+
+resource "aws_subnet" "public" {
+  vpc_id                  = aws_vpc.custom.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+}
+
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.custom.id
+}
+
+resource "aws_route_table" "rt" {
+  vpc_id = aws_vpc.custom.id
+}
+
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_route_table.rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.gw.id
+}
+
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.rt.id
+}
+
+# EC2 Instance
+resource "aws_instance" "example" {
+  ami                         = "ami-0c02fb55956c7d316"
+  instance_type               = "t2.micro"
+  subnet_id                   = aws_subnet.public.id
+  associate_public_ip_address = true
+  tags = { Name = "Terraform-EC2" }
+}
+
+# S3 Bucket
+resource "random_id" "bucket_id" {
+  byte_length = 4
+}
+
+resource "aws_s3_bucket" "private_bucket" {
+  bucket = "my-private-versioned-bucket-${random_id.bucket_id.hex}"
+  tags = { Name = "PrivateBucket" }
+}
+
+resource "aws_s3_bucket_versioning" "versioning" {
+  bucket = aws_s3_bucket.private_bucket.id
+  versioning_configuration { status = "Enabled" }
+}
+
+resource "aws_s3_bucket_acl" "acl" {
+  bucket = aws_s3_bucket.private_bucket.id
+  acl    = "private"
+}
+
+# Lambda Function
+resource "aws_iam_role" "lambda_exec_role" {
+  name = "lambda_exec_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Principal = { Service = "lambda.amazonaws.com" },
+      Effect = "Allow",
+      Sid    = ""
+    }]
+  })
+}
+
+resource "aws_lambda_function" "hello_world" {
+  filename         = "lambda_function_payload.zip"
+  function_name    = "HelloWorldFunction"
+  role             = aws_iam_role.lambda_exec_role.arn
+  handler          = "lambda_function.lambda_handler"
+  runtime          = "python3.9"
+  source_code_hash = filebase64sha256("lambda_function_payload.zip")
+}
+
+# EBS Volume
+resource "aws_ebs_volume" "extra_volume" {
+  availability_zone = aws_instance.example.availability_zone
+  size              = 10
+}
+
+resource "aws_volume_attachment" "ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.extra_volume.id
+  instance_id = aws_instance.example.id
+}
+
+# RDS Instance
+resource "aws_db_subnet_group" "default" {
+  name       = "main"
+  subnet_ids = [aws_subnet.public.id]
+  tags = { Name = "My DB subnet group" }
+}
+
+resource "aws_db_instance" "default" {
+  identifier              = "mydb"
+  engine                  = "mysql"
+  instance_class          = "db.t2.micro"
+  username                = "admin"
+  password                = "password123"
+  db_subnet_group_name    = aws_db_subnet_group.default.name
+  allocated_storage       = 20
+  skip_final_snapshot     = true
+}
+
+# Athena
+resource "aws_athena_database" "sample_db" {
+  name   = "sampledb"
+  bucket = aws_s3_bucket.private_bucket.bucket
+}
+
+resource "aws_athena_named_query" "example" {
+  name      = "CreateSampleTable"
+  database  = aws_athena_database.sample_db.name
+  query     = <<EOF
+  CREATE EXTERNAL TABLE IF NOT EXISTS sampletable (
+    id int,
+    name string
+  )
+  ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe'
+  WITH SERDEPROPERTIES (
+    'serialization.format' = ','
+  ) LOCATION 's3://${aws_s3_bucket.private_bucket.bucket}/sample_data/';
+  EOF
+  workgroup = "primary"
+}
+
+# CloudWatch Alarm
+resource "aws_cloudwatch_metric_alarm" "cpu_alarm" {
+  alarm_name          = "high_cpu_alarm"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "1"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/EC2"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "70"
+  alarm_description   = "This metric monitors EC2 CPU utilization"
+  dimensions = {
+    InstanceId = aws_instance.example.id
+  }
+}
+
+# CloudTrail
+resource "random_id" "trail" {
+  byte_length = 4
+}
+
+resource "aws_s3_bucket" "trail_bucket" {
+  bucket = "cloudtrail-bucket-${random_id.trail.hex}"
+}
+
+resource "aws_cloudtrail" "main" {
+  name                          = "cloudtrail"
+  s3_bucket_name                = aws_s3_bucket.trail_bucket.id
+  include_global_service_events = true
+  is_multi_region_trail         = true
+  enable_log_file_validation    = true
+}
+
+# CloudFormation Stack
+resource "aws_cloudformation_stack" "ec2_stack" {
+  name = "MyEC2Stack"
+  template_body = jsonencode({
+    Resources = {
+      EC2Instance = {
+        Type = "AWS::EC2::Instance",
+        Properties = {
+          ImageId      = "ami-0c02fb55956c7d316",
+          InstanceType = "t2.micro"
+        }
+      }
+    }
+  })
+}
+</code></pre>
+<script>
+function toggleCode3() {
+    const code = document.getElementById('terraform-code-3');
+    code.style.display = code.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+        <h3>Screenshots</h3>
+        <p>Below are the screenshots taken during the execution of this task:</p>
+        <div class="task-images">
+            <img src="/TASKS/TASK3-EC2.png" alt="EC2 Instance" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-VPC.png" alt="VPC Created" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-LAMBDA.png" alt="Lambda Function" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-S3.png" alt="S3 Bucket" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-ROUTING.png" alt="RDS Instance" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-CLOUDWATCH.png" alt="CloudWatch Alarm" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-CLOUDTRAIL.png" alt="CloudTrail Enabled" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-CLOUDFORMATION.png" alt="CloudFormation Template" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK3-EBS.png" alt="CDK Deployed Resource" style="width:300px; height:auto;" />
+            <img src="TASKS/TASK3-ATHENA.png" style="width:300px; height:auto;" />
+        </div>
+
+        <h3>Web Deployment</h3>
+        <p>
+            After collecting the screenshots, I designed a simple HTML-based web page and deployed it on <strong>Vercel</strong>. The deployed page neatly displays all my AWS resources with their respective screenshots and descriptions.
+        </p>
+
+        <h3>Submission</h3>
+        <p>
+            The final hosted link of the webpage was submitted via the provided Google Form as per task instructions.
+        </p>
+
+        <h3>Reflection</h3>
+        <p>
+            This task provided a comprehensive overview of core AWS services and hands-on practice with both Terraform and manual provisioning. Additionally, using Vercel for deployment improved my confidence in front-end and cloud integration workflows.
+        </p>
+    </div>
+</div>
+
 
             <div id="task-4" class="task-content">
-                <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
-                <div class="task-detail">
-                    <h2>Task 04: Swarm Intelligence</h2>
-                    
-                    <h3>Overview</h3>
-                    <p>Multi-robot coordination system that enables a group of robots to work together using distributed intelligence and emergent behavior patterns.</p>
-                    
-                    <h3>Planned Features</h3>
-                    <ul>
-                        <li>Distributed consensus algorithms</li>
-                        <li>Formation control and maintenance</li>
-                        <li>Task allocation and scheduling</li>
-                        <li>Inter-robot communication protocols</li>
-                        <li>Emergent behavior modeling</li>
-                        <li>Fault tolerance and redundancy</li>
-                    </ul>
-                    
-                    <h3>Research Areas</h3>
-                    <p>The project explores bio-inspired algorithms including ant colony optimization, particle swarm optimization, and flocking behaviors adapted for robotic systems.</p>
-                    
-                    <h3>Technical Approach</h3>
-                    <ul>
-                        <li>Graph-based communication networks</li>
-                        <li>Distributed state estimation</li>
-                        <li>Consensus-based decision making</li>
-                        <li>Dynamic role assignment</li>
-                        <li>Scalable architecture design</li>
-                    </ul>
-                    
-                    <h3>Expected Applications</h3>
-                    <p>Search and rescue operations, environmental monitoring, warehouse automation, and large-scale construction projects requiring coordinated robotic efforts.</p>
-                </div>
-            </div>
-        </main>
+    <button class="back-btn" onclick="showSection('home')">← Back to Home</button>
+    <div class="task-detail">
+        <h2>Task 04: ByteWave & CloudNova Infrastructure Provisioning</h2>
+
+        <h3>Overview</h3>
+        <p>This task involved provisioning cloud infrastructure for two different companies: a static website for ByteWave Solutions using S3 and a Python-ready EC2 development server for CloudNova Inc. All infrastructure was deployed using Terraform on AWS.</p>
+
+        <h3>Activity 1: Static Website Hosting – ByteWave Solutions</h3>
+        <ul>
+            <li> Created an S3 bucket named <code>bytewave-website-rt</code></li>
+            <li> Enabled static website hosting with <code>index.html</code> as the root document</li>
+            <li> Configured public access block with appropriate settings</li>
+            <li> Attached a bucket policy allowing public read of <code>index.html</code></li>
+            <li> Uploaded <code>index.html</code> using Terraform</li>
+            <li> Outputted the website URL using Terraform output</li>
+        </ul>
+
+        <h3>Activity 2: EC2 Python Development Server – CloudNova Inc.</h3>
+        <ul>
+            <li> Launched a <code>t2.micro</code> EC2 instance with Amazon Linux 2</li>
+            <li> Configured a security group allowing inbound SSH on port 22</li>
+            <li> Used <code>user_data</code> to install Python3 and Git automatically</li>
+            <li> Outputted the public IP of the instance</li>
+        </ul>
+
+        <h3>Terraform Code</h3>
+        <button class="code-toggle" onclick="toggleCode4()">Show Code</button>
+        <pre id="terraform-code-4" class="code-block" style="display: none;"><code>
+
+variable "bucket_name" {
+  description = "The name of the S3 bucket"
+  type        = string
+  default     = "bytewave-website-rt"
+}
+
+resource "aws_s3_bucket" "website_bucket" {
+  bucket = var.bucket_name
+}
+
+resource "aws_s3_bucket_website_configuration" "website_config" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  index_document {
+    suffix = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "public_access" {
+  bucket                  = aws_s3_bucket.website_bucket.id
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_policy" "public_read" {
+  bucket = aws_s3_bucket.website_bucket.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Sid       = "PublicReadGetObject",
+        Effect    = "Allow",
+        Principal = "*",
+        Action    = "s3:GetObject",
+        Resource  = "${aws_s3_bucket.website_bucket.arn}/*"
+      }
+    ]
+  })
+}
+
+resource "aws_s3_object" "index_file" {
+  bucket       = aws_s3_bucket.website_bucket.id
+  key          = "index.html"
+  source       = "${path.module}/index.html"
+  content_type = "text/html"
+}
+
+output "website_url" {
+  value       = aws_s3_bucket_website_configuration.website_config.website_endpoint
+  description = "URL of the static website"
+}
+
+resource "aws_security_group" "allow_ssh" {
+  name        = "allow_ssh"
+  description = "Allow SSH inbound traffic"
+
+  ingress {
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "dev_server" {
+  ami                         = "ami-0c02fb55956c7d316"
+  instance_type               = "t2.micro"
+  key_name                    = "dev-key"
+  security_groups             = [aws_security_group.allow_ssh.name]
+  associate_public_ip_address = true
+
+  user_data = <<-EOF
+              #!/bin/bash
+              yum update -y
+              yum install -y python3 git
+            EOF
+
+  tags = {
+    Name = "CloudNova-Dev-Server"
+  }
+}
+
+output "public_ip" {
+  description = "Public IP of the EC2 instance"
+  value       = aws_instance.dev_server.public_ip
+}</code></pre>
+
+<h3>Screenshots</h3>
+        <p>Below are the screenshots taken during the execution of this task:</p>
+        <div class="task-images">
+            <img src="/TASKS/TASK4-EC2.png" alt="EC2 Instance" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK4-BUCKET.png" alt="VPC Created" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK4-SECUTIRY_GROUP.png" alt="Lambda Function" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK4-VERIFY.png" alt="S3 Bucket" style="width:300px; height:auto;" />
+            <img src="/TASKS/TASK4-WEBPAGE.png" alt="S3 Bucket" style="width:300px; height:auto;" />
+            
+        </div>
+
+        <script>
+            function toggleCode4() {
+                const code = document.getElementById('terraform-code-4');
+                code.style.display = code.style.display === 'none' ? 'block' : 'none';
+            }
+        </script>
     </div>
+</div>
+
 
     <script>
         function showSection(section) {
